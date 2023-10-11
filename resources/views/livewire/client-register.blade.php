@@ -228,7 +228,7 @@
             />
             @endif
         </div>
-        @if ($selected_vet_province!=null)
+        {{-- @if ($selected_vet_province!=null)
         <div class="mt-4">
 
             <x-native-select label="อำเภอ" placeholder="เลือกอำเภอ" 
@@ -240,15 +240,15 @@
         <div class="mt-4">
             <x-native-select label="ตำบล" placeholder="เลือกตำบล" :options="$vet_area"  wire:model="selected_vet_area" />
         </div>
-        @endif
-        @if ($selected_vet_area!=null)
+        @endif --}}
+        @if ($selected_vet_province!=null)
         <div class="mt-4">
-            <x-input label="vetname" wire:model="vet_name"/>
+            <x-input label="vetname" wire:model.defer="vet_name"/>
         </div>
         @endif
-        @if ($vet_name!=null)
+        {{-- @if ($vet_name!=null)
         {{$vet_name}} {{$selected_vet_area}} {{$selected_vet_city}} {{$selected_vet_province}}
-        @endif
+        @endif --}}
         
         <!-- {{$vet_id}}
                 <x-input label="search" wire:model.debounce.1000ms="selected_vet_text" /> -->
@@ -286,12 +286,7 @@
             ขนาด {{$pet_weight}}<br>
             ไปรับคำปรึกษา<br>
             และเข้าร่วมโปรแกรม Super TRIO<br>
-            ได้ที่ {{$vet_id?App\Models\Vet::find($vet_id)->vet_name:'-'}} ครับ<br>
-        </p>
-        <p class="text-center text-xs text-secondary-red">
-            กรุณากดรับสิทธิ์ขณะที่ท่านอยู่ที่คลินิกตามที่ลงทะเบียน<br>
-            เพื่อโชว์หลักฐานการลงทะเบียนให้คลินิกรับทราบ<br>
-            (รหัสมีอายุ 15 นาที)
+            ได้ที่ {{$vet_name}} ครับ<br>
         </p>
 
         <div class="py-2 text-center flex justify-center mt-auto">

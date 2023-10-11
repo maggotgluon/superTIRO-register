@@ -34,7 +34,7 @@ class ClientRegister extends Component
     public $token;
     public $refno;
 
-
+    // protected $queryString = ['currentStep'=> ['except' => 1, 'as' => 'p']];
     protected $messages = [
         'email.email' => 'กรุณากรอก อีเมล์ ที่ถูกต้อง',
         'phone.required' => 'จำเป็นต้องระบุ หมายเลขโทรศัพท์',
@@ -176,10 +176,11 @@ class ClientRegister extends Component
      */
     public function thirdStepSubmit()
     {
-        $addr = ThailandAddr::where('Tambon',$this->selected_vet_area)
-                                ->where('District',$this->selected_vet_city)
-                                ->where('Province',$this->selected_vet_province)->first();
-        $vet = $this->vet_name.' '.$this->selected_vet_area.' '.$this->selected_vet_city.' '.$this->selected_vet_province;
+        $addr = ThailandAddr::where('Province',$this->selected_vet_province)->first();
+            /* where('Tambon',$this->selected_vet_area)
+            ->where('District',$this->selected_vet_city) */
+        $vet = $this->vet_name;
+        // .' '.$this->selected_vet_area.' '.$this->selected_vet_city.' '.$this->selected_vet_province;
         // dd($addr,$vet);
         $validatedData = $this->validate([
             'vet_name' => 'required'
@@ -210,7 +211,7 @@ class ClientRegister extends Component
         }
         $this->currentStep = 4;
 
-        redirect( route('client.ticket',['phone'=>$this->phone]) );
+        // redirect( route('client.ticket',['phone'=>$this->phone]) );
         // $this->currentStep = 4;
     }
     public function confirmation(){

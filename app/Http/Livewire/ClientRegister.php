@@ -202,12 +202,13 @@ class ClientRegister extends Component
             'client_code'=>0,
         ]);
         $client->client_code = 'TRIO'.Str::padLeft($client->id, 5, '0');
-        dd($client);
         $client->save();
-
+        // dd($client);
+        
         if($this->validate_test){
             $this->confirmation();
         }
+        $this->currentStep = 4;
 
         redirect( route('client.ticket',['phone'=>$this->phone]) );
         // $this->currentStep = 4;

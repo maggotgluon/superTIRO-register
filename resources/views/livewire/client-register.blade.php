@@ -299,8 +299,8 @@
             <!-- <x-button lg outline icon="chevron-left" primary
                 wire:click="back(1)" type="button" label="Back" /> -->
 
-            <x-button lg right-icon="chevron-right" primary class="bg-gradient-to-br from-gradient-start to-gradient-end rounded-2xl"
-             wire:click="activateClient()" type="button" label="กดเพื่อแสดงหลักฐาน" />
+            {{-- <x-button lg right-icon="chevron-right" primary class="bg-gradient-to-br from-gradient-start to-gradient-end rounded-2xl"
+             wire:click="activateClient()" type="button" label="กดเพื่อแสดงหลักฐาน" /> --}}
 
         </div>
 

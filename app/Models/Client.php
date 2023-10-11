@@ -27,7 +27,8 @@ class Client extends Model
         'option_2',
         'option_3',
 
-        'vet_id',
+        'vet_name',
+        'addr_id',
         'active_date',
         'active_status'
     ];

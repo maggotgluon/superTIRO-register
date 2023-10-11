@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@1,400;1,600&display=swap');
+body{
+    font-family: 'Prompt', sans-serif;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-progress-value{
+    @apply bg-primary-blue;
+}
+::-webkit-progress-bar{
+    @apply bg-primary-blue/50;
+}

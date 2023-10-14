@@ -243,7 +243,7 @@
         @endif --}}
         @if ($selected_vet_province!=null)
         <div class="mt-4">
-            <x-input label="vetname" wire:model.defer="vet_name"/>
+            <x-input label="ชื่อคลินิก หรือ โรงพยาบาลสัตว์" wire:model.defer="vet_name"/>
         </div>
         @endif
         {{-- @if ($vet_name!=null)

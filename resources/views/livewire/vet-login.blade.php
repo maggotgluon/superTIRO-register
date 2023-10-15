@@ -5,7 +5,7 @@
         <img class="m-auto" src="{{url('/loading.gif')}}"/>
     </div>
 
-    <x-toggle label="Use username for admin login" wire:model.lazy="adm" />
+    {{-- <x-toggle label="Use username for admin login" wire:model.lazy="adm" /> --}}
     
     @if ($error)
         <x-badge negative label="{{$error}}" />

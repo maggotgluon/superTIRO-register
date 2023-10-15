@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Admin\RegisterDash;
 use App\Models\Client;
 use App\Models\ClientInfo;
 use App\Models\User;
@@ -114,12 +115,13 @@ Route::name('rmkt.')->prefix('rmkt')->group(function (){
 
 });
 Route::name('admin.')->prefix('admin')->group(function (){
+    Route::get('/dashboard', RegisterDash::class )->name('registerDash');
 
-    Route::get('/dashboard', DashboardV2::class )->name('dashboard');
+    /* Route::get('/dashboard', DashboardV2::class )->name('dashboard');
     
     Route::get('/vet', vetall::class)->name('vets');
 
-    Route::get('/vet/{vet_id}', vetSingle::class)->name('vetSingle');
+    Route::get('/vet/{vet_id}', vetSingle::class)->name('vetSingle'); */
 
 });
 

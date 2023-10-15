@@ -40,6 +40,7 @@ Route::get('/', function () {
 })->name('index');
 
 Route::get('/admin', function () {
+    return redirect(route('admin.registerDash'));
     return view('welcome');
 })->name('admin');
 
@@ -145,9 +146,9 @@ Route::name('vet.')->prefix('vet')->group(function (){
 
 Route::get('/download',function(){
     $now = Carbon::now()->toDateTimeString();
-    // dd($now);
     $fileName = 'client '.$now.'.csv';
     $Clients = Client::all();
+    // dd($now,$Clients);
     
     $headers = array(
         "Content-type"        => "text/csv",
@@ -157,7 +158,7 @@ Route::get('/download',function(){
         "Expires"             => "0"
     );
 
-    $columns = array('code', 'name', 'email', 'phone', 'status', 'activate date','vet id', 'vet name' ,'Pet name', 'Pet bread', 'Pet Weight', 'Pet Age','option 1','option 2','option 3','create at','update at');
+    $columns = array('code', 'name', 'email', 'phone', 'vet name' ,'Province','Pet name', 'Pet bread', 'Pet Weight', 'Pet Age','create at','update at');
 
     $callback = function() use($Clients, $columns) {
         $file = fopen('php://output', 'w');
@@ -168,29 +169,18 @@ Route::get('/download',function(){
             $row['name']    = $Client->name;
             $row['email']    = $Client->email;
             $row['phone']  = $Client->phone;
-            $row['status']  = $Client->active_status;
-            $row['activate_date']  = $Client->active_date??"-";
+
             $row['created_at']  = $Client->created_at??"-";
             $row['updated_at']  = $Client->updated_at??"-";
-            $row['vet']  = Vet::find($Client->vet_id)->vet_name??$Client->vet_id;
-            $row['vet_id']  = $Client->vet_id;
-            
-            $row['option 1']  = $Client->option_1??0;
-            $row['option 2']  = $Client->option_2??0;
-            $row['option 3']  = $Client->option_3??0;
-            // $option = explode("-", $Client->phoneIsVerified);
-            // // dd(str_contains($option[1],'standard'),str_contains($option[1],'extra'));
-            // if( is_array($option) ){
-            //     $row['offerBasic'] = count($option)>1?str_contains($option[1],'standard'):"";
-            //     $row['offerExtra'] = count($option)>1?str_contains($option[1],'extra'):"";
-            // }
+            $row['vet']  = $Client->vet_name??"-";
+            $row['Province']  = App\Models\ThailandAddr::find($Client->addr_id)->Province;
 
             $row['petName']  = $Client->pet_name;
             $row['petBreed']  = $Client->pet_breed;
             $row['petWeight']  = $Client->pet_weight;
             $row['petAge']  = $Client->pet_age_month.' Year '.$Client->pet_age_month.' Month';
 
-            fputcsv($file, array($row['code'], $row['name'], $row['email'], $row['phone'], $row['status'], $row['activate_date'], $row['vet_id'], $row['vet'], $row['petName'],$row['petBreed'],$row['petWeight'],$row['petAge'],$row['option 1'],$row['option 2'],$row['option 3'],$row['created_at'],$row['updated_at']));
+            fputcsv($file, array($row['code'], $row['name'], $row['email'], $row['phone'], $row['vet'], $row['Province'], $row['petName'],$row['petBreed'],$row['petWeight'],$row['petAge'],$row['created_at'],$row['updated_at']));
         }
 
         fclose($file);

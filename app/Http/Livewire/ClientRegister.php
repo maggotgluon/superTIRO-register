@@ -206,9 +206,9 @@ class ClientRegister extends Component
         $client->save();
         // dd($client);
         
-        if($this->validate_test){
+        /* if($this->validate_test){
             $this->confirmation();
-        }
+        } */
         $this->currentStep = 4;
 
         // redirect( route('client.ticket',['phone'=>$this->phone]) );

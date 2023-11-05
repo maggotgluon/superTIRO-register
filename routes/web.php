@@ -30,14 +30,16 @@ use Carbon\Carbon;
 |
 */
 
-Route::get('/', function () {
-    $date = Carbon::create('21 Aug 2025');
-    if(now()>=$date){
-        return view('under');
-    }
-    return view('client.register');
-    // return view('welcome');
-})->name('index');
+// Route::get('/', function () {
+//     $date = Carbon::create('21 Aug 2025');
+//     if(now()>=$date){
+//         return view('under');
+//     }
+//     return view('client.register');
+//     // return view('welcome');
+// })->name('index');
+
+Route::view('/','landing')->name('index');
 
 Route::get('/admin', function () {
     return redirect(route('admin.registerDash'));

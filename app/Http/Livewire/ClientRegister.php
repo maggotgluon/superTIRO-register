@@ -34,6 +34,10 @@ class ClientRegister extends Component
     public $token;
     public $refno;
 
+    protected $queryString = [
+        'currentStep'=>['as' => 'p']
+    ];
+
     // protected $queryString = ['currentStep'=> ['except' => 1, 'as' => 'p']];
     protected $messages = [
         'email.email' => 'กรุณากรอก อีเมล์ ที่ถูกต้อง',
@@ -60,21 +64,10 @@ class ClientRegister extends Component
         
         $this->selected_vet_city=null;
         $this->selected_vet_area=null;
-        // dd($this->vet_city,$selected_vet_province);
-
-        /* $this->vetall = Vet::all();
-        $this->vet_city =$this->vetall->where('vet_province',$selected_vet_province)->unique('vet_city');
-        $this->vet=$this->vetall->where('vet_province',$selected_vet_province);
-        $this->selected_vet_city=null;
-        $this->selected_vet_area=null; */
-        // $this->selected_vet_text=null;
     }
     public function updatedSelectedVetCity($selected_vet_city){
 
         $this->vet_area=ThailandAddr::where('District',$selected_vet_city)->get()->unique('Tambon')->pluck('Tambon');
-        /* $this->vet_area =$this->vetall->where('vet_city',$selected_vet_city)->unique('vet_area');
-        $this->vet=$this->vetall->where('vet_city',$selected_vet_city); */
-        // dd($selected_vet_city,$this->vet_area);
         $this->selected_vet_area=null;
         // $this->selected_vet_text=null;
     }
@@ -120,7 +113,7 @@ class ClientRegister extends Component
             $this->sendCodeTH();
         }
 
-        $this->currentStep = 1.5;
+        $this->currentStep = 3;
         
         if($this->status=='pending'){
         }
@@ -139,12 +132,12 @@ class ClientRegister extends Component
         if($this->validate_test){
             $result = $this->verifyCodeTH($this->code);
             if($this->status=="approved" || $result){
-                $this->currentStep = 2;
+                $this->currentStep = 4;
             }else{
                 $this->status = 'error';
             }
         }else{
-            $this->currentStep = 2;
+            $this->currentStep = 4;
         }
 
     }
@@ -167,7 +160,7 @@ class ClientRegister extends Component
         $this->vet_province=ThailandAddr::distinct('Province')->pluck('Province');
         // dd($this->vet_province);
         // $this->vet_province = Vet::orderBy('vet_province','asc')->distinct('vet_province')->pluck('vet_province');
-        $this->currentStep = 3;
+        $this->currentStep = 5;
     }
     /**
      * Write code on Method
@@ -209,10 +202,7 @@ class ClientRegister extends Component
         /* if($this->validate_test){
             $this->confirmation();
         } */
-        $this->currentStep = 4;
-
-        // redirect( route('client.ticket',['phone'=>$this->phone]) );
-        // $this->currentStep = 4;
+        $this->currentStep = 6;
     }
     public function confirmation(){
 
@@ -223,13 +213,7 @@ class ClientRegister extends Component
             'vet_name' => Vet::find($this->vet_id)->vet_name,
             'name' => $this->firstname.' '.$this->lastname,
         ];
-        // $details = [
-        //     'email' => 'maggotgluon@gmail.com',
-        //     'phone' => '0809166690',
-        //     'pet_weight' => 'pet_weight',
-        //     'vet_name' => 'vet_id',
-        //     'name' => 'firstname'.' '.'lastname',
-        // ];
+        
         
         try {
             if($this->email){
@@ -241,37 +225,21 @@ class ClientRegister extends Component
 
             $response = $client->request('POST', 'https://api-v2.thaibulksms.com/sms', [
                 'form_params' => [
-                  'msisdn' => '+66' . str_replace('-', '', $details['phone']) ,
-                  'message' => $body_sms,
-                  'sender' => 'SuperTRIO',
-                  'force'=>'corporate',
-                  'shorten_url' => 'true'
+                    'msisdn' => '+66' . str_replace('-', '', $details['phone']) ,
+                    'message' => $body_sms,
+                    'sender' => 'SuperTRIO',
+                    'force'=>'corporate',
+                    'shorten_url' => 'true'
                 ],
                 'headers' => [
-                  'accept' => 'application/json',
-                  'authorization' => getenv('BULKSMS_AUTH'),
-                  'content-type' => 'application/x-www-form-urlencoded',
+                    'accept' => 'application/json',
+                    'authorization' => getenv('BULKSMS_AUTH'),
+                    'content-type' => 'application/x-www-form-urlencoded',
                 ],
-              ]);
+            ]);
 
-            // $accountSid = getenv("TWILIO_SID");
-            // $authToken = getenv("TWILIO_AUTH_TOKEN");
-            // $twilioNumber = getenv("TWILIO_FROM");
-            // // dd($accountSid,$authToken);
-            // $twilio = resolve('TwilioClient');
-            // // $client = new Client($accountSid, $authToken);
-            
-            // $twilio->messages->create(
-            //     '+66' . str_replace('-', '', $details['phone']) , [
-            //     'from' => $twilioNumber,
-            //     'body' => $body_sms
-            // ]);
- 
-            // return back()
-            // ->with('success','Sms has been successfully sent.');
  
         } catch (\Exception $e) {
-            // dd($e->getMessage());
             return back()
             ->with('error', $e->getMessage());
         }
@@ -372,19 +340,16 @@ class ClientRegister extends Component
         try {
         $response = $client->request('POST', 'https://otp.thaibulksms.com/v2/otp/request', [
             'form_params' => [
-              'key' => getenv('BULKSMS_KEY'),
-              'secret' => getenv('BULKSMS_SECRET'),
-              'msisdn' => '+66' . str_replace('-', '', $this->phone)
+                'key' => getenv('BULKSMS_KEY'),
+                'secret' => getenv('BULKSMS_SECRET'),
+                'msisdn' => '+66' . str_replace('-', '', $this->phone)
             ],
             'headers' => [
                 'accept' => 'application/json',
                 'content-type' => 'application/x-www-form-urlencoded',
             ],
         ]);
-        // dd(json_decode($response->getBody()->getContents()));
         $this->token = json_decode($response->getBody()->getContents())->token;
-        // $this->refno = json_decode($response->getBody()->getContents())->refno;
-        // dd($response,$response->getBody(),$this->token );
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
             return false;
@@ -433,7 +398,7 @@ class ClientRegister extends Component
     public function openConsent()
     {
         $this->consent = 1;
-        $this->currentStep =1.25;
+        $this->currentStep =2;
     }
 
 }
